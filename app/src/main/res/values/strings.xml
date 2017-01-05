@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">SimplePassNew</string>
+
+    <!-- Forms -->
+    <string name="form_phone_number">DDD + telefone</string>
+    <string name="form_password">Senha</string>
+
+    <!-- Buttons -->
+    <string name="button_enter">Entrar</string>
+    <string name="button_recover_password">Recuperar senha</string>
+    <string name="button_register">Registrar</string>
+
+    <!-- Api -->
+    <string name="api_base_url">http://192.168.0.10:8080</string>
+
+    <!-- Hint -->
+    <string name="hint_name">Qual seu nome?</string>
+    <string name="hint_password">Senha. Mais de 6 digitos</string>
+    <string name="hint_username">DDD + telefone</string>
+    <string name="hint_email">Qual seu email?</string>
+</resources>
