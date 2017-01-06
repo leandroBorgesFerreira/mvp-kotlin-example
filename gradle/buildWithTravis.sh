@@ -1,6 +1,6 @@
 if [ "$TRAVIS_TAG" == "" ]; then
-  echo -e 'Build Branch'
-  ./gradlew build
+  echo -e 'Testing Branch'
+  ./gradlew clean test
 elif [ "$TRAVIS_TAG" != "" ]; then
   echo -e 'Build Branch for tag: Tag ['$TRAVIS_TAG']'
   ./gradlew -PbintrayUser="${bintrayUser}" -PbintrayKey="${bintrayKey}" build bintrayUpload --stacktrace --info
