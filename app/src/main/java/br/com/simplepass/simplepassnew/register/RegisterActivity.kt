@@ -1,10 +1,16 @@
 package br.com.simplepass.simplepassnew.register
 
+import android.app.ActivityOptions
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import br.com.simplepass.simplepassnew.R
-import kotlinx.android.synthetic.main.activity_login.*
+import br.com.simplepass.simplepassnew.map.MainActivity
+
 import kotlinx.android.synthetic.main.activity_register.*
+
+import org.jetbrains.anko.intentFor
 
 class RegisterActivity : AppCompatActivity(), RegisterView {
 
@@ -20,17 +26,25 @@ class RegisterActivity : AppCompatActivity(), RegisterView {
     }
 
     override fun navigateToMainScreen() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val intent = intentFor<MainActivity>()
+
+        if (Build.VERSION.SDK_INT  >= Build.VERSION_CODES.LOLLIPOP) {
+            val activityOptions = ActivityOptions.makeSceneTransitionAnimation(this)
+
+            startActivity(intent, activityOptions.toBundle())
+        } else{
+            startActivity(intent)
+        }
     }
 
     override fun showRegisterError(error: String) {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
     }
 
     override fun validateForm(): Boolean {
         var result = true
 
-        if(registerUsername.text.toString().length < 10 || loginUsername.text.toString().length > 21){
+        if(registerUsername.text.toString().length < 10 || registerUsername.text.toString().length > 21){
             //ToDo: feedback!
             result = false
         }
@@ -45,7 +59,7 @@ class RegisterActivity : AppCompatActivity(), RegisterView {
             result = false
         }
 
-        if(registerEmail.text.toString().isEmpty()) {
+        if(registerEmail.text.toString().isEmpty() || !registerEmail.text.toString().contains("@")) {
             //ToDo: feedback!
             result = false
         }

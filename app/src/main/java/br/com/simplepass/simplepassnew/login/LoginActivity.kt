@@ -5,6 +5,7 @@ import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
+import android.widget.Toast
 import br.com.simplepass.simplepassnew.R
 import br.com.simplepass.simplepassnew.base.BasePresenter
 import br.com.simplepass.simplepassnew.map.MainActivity
@@ -85,7 +86,7 @@ class LoginActivity : AppCompatActivity(), LoginView{
     }
 
     override fun showLoginError(error: String) {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
     }
 
     override fun validateCredentials() : Boolean {

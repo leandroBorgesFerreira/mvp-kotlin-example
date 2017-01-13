@@ -9,8 +9,6 @@ import br.com.simplepass.simplepassnew.dto.RegisterDto
  */
 interface RegisterPresenter : BasePresenter {
     fun tryRegister(user: User)
-
-    fun onLoginError(error: String)
-
-    fun onLoginSuccess()
+    fun onRegisterError(error: String)
+    fun onRegisterSuccess()
 }

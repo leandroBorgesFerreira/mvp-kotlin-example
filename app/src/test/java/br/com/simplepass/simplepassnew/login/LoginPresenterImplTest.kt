@@ -25,6 +25,10 @@ class LoginPresenterImplTest {
 
     @Mock
     lateinit var mLoginInteractor: LoginInteractor
+    @Mock
+    lateinit var mLoginView: LoginView
+
+    lateinit var mLoginPresenter: LoginPresenter
 
     @Before
     fun setup(){
@@ -34,15 +38,19 @@ class LoginPresenterImplTest {
                 "Leandro",
                 null)))
 
+        mLoginPresenter = LoginPresenterImpl(mLoginView, mLoginInteractor)
+
     }
 
     @Test
     fun loginTest(){
         val testSubscriber = TestSubscriber.create<User>()
 
-        mLoginInteractor.login("a", "a").subscribe(testSubscriber)
-        testSubscriber.assertNoErrors()
-        testSubscriber.assertCompleted()
+        mLoginPresenter.tryLogin("a", "a")
+
+//        mLoginInteractor.login("a", "a").subscribe(testSubscriber)
+//        testSubscriber.assertNoErrors()
+//        testSubscriber.assertCompleted()
     }
 
 

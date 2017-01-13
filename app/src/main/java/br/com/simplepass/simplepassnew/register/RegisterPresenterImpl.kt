@@ -18,7 +18,7 @@ class RegisterPresenterImpl(val mRegisterView: RegisterView,
 
             override fun onError(e: Throwable?) {
                 if(e != null && e.message != null){
-                    onLoginError(e.message!!)
+                    onRegisterError(e.message!!)
                 }
             }
 
@@ -28,11 +28,11 @@ class RegisterPresenterImpl(val mRegisterView: RegisterView,
         })
     }
 
-    override fun onLoginError(error: String) {
+    override fun onRegisterError(error: String) {
         mRegisterView.showRegisterError(error)
     }
 
-    override fun onLoginSuccess() {
+    override fun onRegisterSuccess() {
         mRegisterView.navigateToMainScreen()
     }
 }

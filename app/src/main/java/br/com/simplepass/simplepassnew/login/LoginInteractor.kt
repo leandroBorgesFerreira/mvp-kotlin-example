@@ -1,6 +1,7 @@
 package br.com.simplepass.simplepassnew.login
 
 import br.com.simplepass.simplepassnew.domain.User
+import retrofit2.Retrofit
 import rx.Observable
 
 /**
@@ -8,4 +9,5 @@ import rx.Observable
  */
 interface LoginInteractor {
     fun login(username: String, password: String) : Observable<User>
+    fun setRetrofit(retrofit: Retrofit)
 }

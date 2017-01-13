@@ -22,6 +22,9 @@ class LoginInteractorImpl : LoginInteractor {
         CustomApplication.mNetComponent.inject(this)
     }
 
+    override fun setRetrofit(retrofit: Retrofit){
+        mRetrofit = retrofit
+    }
 
     override fun login(username: String, password: String) =
         mRetrofit.create(ApiClient::class.java)

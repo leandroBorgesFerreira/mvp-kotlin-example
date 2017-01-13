@@ -18,4 +18,6 @@
     <string name="hint_password">Senha. Mais de 6 digitos</string>
     <string name="hint_username">DDD + telefone</string>
     <string name="hint_email">Qual seu email?</string>
+
+    <!-- Errors -->
 </resources>

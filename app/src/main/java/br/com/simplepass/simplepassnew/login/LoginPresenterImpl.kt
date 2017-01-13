@@ -18,6 +18,7 @@ class LoginPresenterImpl(val mLoginView: LoginView, val mLoginInteractor: LoginI
 
             override fun onError(e: Throwable) {
                 mLoginView.showProgress(false)
+                onLoginError("Falha na comunicação")
 //                    Log.d("On error called", "Error: " + e.message)
 //
 //                    e.printStackTrace()
@@ -25,7 +26,7 @@ class LoginPresenterImpl(val mLoginView: LoginView, val mLoginInteractor: LoginI
 //                    val erroMessage = e.message
 //
 //                    if(erroMessage != null) {
-//                        listener.onLoginError(erroMessage)
+//                        listener.onRegisterError(erroMessage)
 //                    }
             }
 
