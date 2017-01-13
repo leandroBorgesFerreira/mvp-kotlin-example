@@ -38,19 +38,21 @@ class LoginPresenterImplTest {
                 "Leandro",
                 null)))
 
+        `when`(mLoginInteractor.login("b", "b")).thenReturn(Observable.create(Observable.OnSubscribe<User> {
+            sub -> sub.onError(Exception("Erro"))
+        }))
+
         mLoginPresenter = LoginPresenterImpl(mLoginView, mLoginInteractor)
 
     }
 
     @Test
     fun loginTest(){
-        val testSubscriber = TestSubscriber.create<User>()
-
         mLoginPresenter.tryLogin("a", "a")
+        Mockito.verify(mLoginView).navigateToMainScreen()
 
-//        mLoginInteractor.login("a", "a").subscribe(testSubscriber)
-//        testSubscriber.assertNoErrors()
-//        testSubscriber.assertCompleted()
+        mLoginPresenter.tryLogin("b", "b")
+        Mockito.verify(mLoginView).showLoginError("Erro")
     }
 
 
