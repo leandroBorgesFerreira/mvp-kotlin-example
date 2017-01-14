@@ -8,6 +8,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -23,27 +25,46 @@ class RegisterPresenterTest {
 
     @Mock
     lateinit var mRegisterInteractor: RegisterInteractor
+    @Mock
+    lateinit var mRegisterView: RegisterView
 
-    lateinit var mUser : User
+    lateinit var mRegisterPresenter: RegisterPresenter
+
+    val erroMessage = "Erro"
 
     @Before
     fun setup(){
-        mUser = provideDefaultUser()
-
         MockitoAnnotations.initMocks(this)
-        Mockito.`when`(mRegisterInteractor.register(provideDefaultUser())).thenReturn(
+        `when`(mRegisterInteractor.register(provideDefaultUser())).thenReturn(
                 Observable.just(provideDefaultUser()))
 
+        `when`(mRegisterInteractor.register(provideDefaultUser2()))
+                .thenReturn(Observable.create(Observable.OnSubscribe<User> {
+                    sub -> sub.onError(Exception("Erro"))
+                }))
+
+        `when`(mRegisterInteractor.register(provideDefaultUser3()))
+                .thenReturn(Observable.create(Observable.OnSubscribe<User> {
+                    sub -> sub.onError(Exception())
+                }))
+
+        mRegisterPresenter = RegisterPresenterImpl(mRegisterView, mRegisterInteractor)
     }
 
     @Test
     fun registerTest(){
-        val testSubscriber = TestSubscriber.create<User>()
+        mRegisterPresenter.tryRegister(provideDefaultUser())
+        verify(mRegisterView).navigateToMainScreen()
 
-        mRegisterInteractor.register(provideDefaultUser()).subscribe(testSubscriber)
-        testSubscriber.assertNoErrors()
-        testSubscriber.assertCompleted()
+        mRegisterPresenter.tryRegister(provideDefaultUser2())
+        verify(mRegisterView).showRegisterError(erroMessage)
+
+        mRegisterPresenter.tryRegister(provideDefaultUser3())
+        verify(mRegisterView).showRegisterError("Erro ao conectar") //Mensagem de erro padrão
+
     }
 
     fun provideDefaultUser() = User(1, "5531991889992", "Leandro", null)
+    fun provideDefaultUser2() = User(2, "5531991889992", "Leandro", null)
+    fun provideDefaultUser3() = User(3, "5531991889992", "Leandro", null)
 }

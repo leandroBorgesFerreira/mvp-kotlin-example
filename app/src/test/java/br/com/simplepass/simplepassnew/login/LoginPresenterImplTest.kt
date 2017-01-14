@@ -43,7 +43,6 @@ class LoginPresenterImplTest {
         }))
 
         mLoginPresenter = LoginPresenterImpl(mLoginView, mLoginInteractor)
-
     }
 
     @Test
@@ -54,8 +53,5 @@ class LoginPresenterImplTest {
         mLoginPresenter.tryLogin("b", "b")
         Mockito.verify(mLoginView).showLoginError("Erro")
     }
-
-
-
 
 }

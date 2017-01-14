@@ -14,16 +14,14 @@ class RegisterPresenterImpl(val mRegisterView: RegisterView,
         mRegisterInteractor.register(user).subscribe(object : Subscriber<User>(){
             override fun onNext(t: User?) {
                 mRegisterInteractor.saveUser(user)
+                onRegisterSuccess()
             }
 
             override fun onError(e: Throwable?) {
-                if(e != null && e.message != null){
-                    onRegisterError(e.message!!)
-                }
+                onRegisterError(e?.message ?: "Erro ao conectar")
             }
 
             override fun onCompleted() {
-
             }
         })
     }

@@ -67,7 +67,7 @@
 
 
 
-    <br.com.simplepass.loading_button_lib.CircularProgressButton
+    <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
         android:layout_marginTop="8dp"
         android:id="@+id/loginBtnEnter"
         android:layout_width="match_parent"
