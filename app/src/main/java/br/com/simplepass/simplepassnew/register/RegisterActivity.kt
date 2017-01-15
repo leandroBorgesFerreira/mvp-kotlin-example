@@ -6,11 +6,13 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import br.com.simplepass.simplepassnew.R
+import br.com.simplepass.simplepassnew.domain.User
 import br.com.simplepass.simplepassnew.map.MainActivity
 
 import kotlinx.android.synthetic.main.activity_register.*
 
 import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.onClick
 
 class RegisterActivity : AppCompatActivity(), RegisterView {
 
@@ -19,6 +21,8 @@ class RegisterActivity : AppCompatActivity(), RegisterView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+
+        configListeners()
     }
 
     override fun showProgress(show: Boolean) {
@@ -34,6 +38,20 @@ class RegisterActivity : AppCompatActivity(), RegisterView {
             startActivity(intent, activityOptions.toBundle())
         } else{
             startActivity(intent)
+        }
+    }
+
+    fun configListeners(){
+        registerBtnEnter.onClick {
+            if(validateForm()) {
+                mRegisterPresenter.tryRegister(User(
+                        0,
+                        registerUsername.text.toString(),
+                        registerPassword.text.toString(),
+                        registerName.text.toString(),
+                        registerEmail.text.toString()
+                ))
+            }
         }
     }
 

@@ -8,9 +8,11 @@ import android.telephony.PhoneNumberFormattingTextWatcher
 import android.widget.Toast
 import br.com.simplepass.simplepassnew.R
 import br.com.simplepass.simplepassnew.base.BasePresenter
+import br.com.simplepass.simplepassnew.domain.repository.RepositoryInteractorImpl
 import br.com.simplepass.simplepassnew.map.MainActivity
 import br.com.simplepass.simplepassnew.register.RegisterActivity
 import br.com.simplepass.simplepassnew.resetPassword.ResetPasswordActivity
+import br.com.simplepass.simplepassnew.utils.SchedulerProvider
 import dagger.Module
 
 import kotlinx.android.synthetic.main.activity_login.*
@@ -25,7 +27,7 @@ class LoginActivity : AppCompatActivity(), LoginView{
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        mLoginPresenter = LoginPresenterImpl(this, LoginInteractorImpl())
+        mLoginPresenter = LoginPresenterImpl(this, RepositoryInteractorImpl(), SchedulerProvider.instance)
 
         loginUsername.addTextChangedListener(PhoneNumberFormattingTextWatcher())
 
@@ -33,7 +35,9 @@ class LoginActivity : AppCompatActivity(), LoginView{
         loginBtnRegister.onClick { navigateToRegister() }
         loginBtnResetPassword.onClick { navigateToResetPassword() }
         loginBtnEnter.onClick {
-            mLoginPresenter.tryLogin(loginUsername.text.toString(), loginPassword.text.toString())
+            if(validateCredentials()) {
+                mLoginPresenter.tryLogin(loginUsername.text.toString(), loginPassword.text.toString())
+            }
         }
     }
 

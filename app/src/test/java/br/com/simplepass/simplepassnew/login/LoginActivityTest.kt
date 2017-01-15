@@ -16,7 +16,13 @@ import android.content.Intent
 import android.support.design.widget.TextInputEditText
 import br.com.simplepass.simplepassnew.register.RegisterActivity
 import br.com.simplepass.simplepassnew.resetPassword.ResetPasswordActivity
+import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_register.*
 import org.junit.Assert
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.Mockito.verify
+import org.mockito.MockitoAnnotations
 import org.robolectric.shadows.ShadowToast
 
 
@@ -27,46 +33,66 @@ import org.robolectric.shadows.ShadowToast
 @Config(constants = BuildConfig::class, manifest = "src/main/AndroidManifest.xml", packageName = "br.com.simplepass.simplepassnew", sdk = intArrayOf(23))
 class LoginActivityTest {
 
-    lateinit var activity: LoginActivity
+    lateinit var mLoginActivity: LoginActivity
     lateinit var shadowActivity: ShadowActivity
-    lateinit var username: TextInputEditText
+    lateinit var usernameET: TextInputEditText
     lateinit var passwordET: TextInputEditText
     lateinit var btnLogin: Button
     lateinit var btnRecoverPassword: Button
     lateinit var btnRegister: Button
 
+    @Mock
+    lateinit var mPresenter: LoginPresenter
+
     @Before
     fun setup() {
-        activity = Robolectric.setupActivity(LoginActivity::class.java)
-        shadowActivity = Shadows.shadowOf(activity)
-        username = activity.findViewById(R.id.loginUsername) as TextInputEditText
-        passwordET = activity.findViewById(R.id.loginPassword) as TextInputEditText
-        btnLogin = activity.findViewById(R.id.loginBtnEnter) as Button
-        btnRecoverPassword = activity.findViewById(R.id.loginBtnResetPassword) as Button
-        btnRegister = activity.findViewById(R.id.loginBtnRegister) as Button
+        MockitoAnnotations.initMocks(this)
+
+        mLoginActivity = Robolectric.setupActivity(LoginActivity::class.java)
+        mLoginActivity.setPresenter(mPresenter)
+
+        shadowActivity = Shadows.shadowOf(mLoginActivity)
+        usernameET = mLoginActivity.findViewById(R.id.loginUsername) as TextInputEditText
+        passwordET = mLoginActivity.findViewById(R.id.loginPassword) as TextInputEditText
+        btnLogin = mLoginActivity.findViewById(R.id.loginBtnEnter) as Button
+        btnRecoverPassword = mLoginActivity.findViewById(R.id.loginBtnResetPassword) as Button
+        btnRegister = mLoginActivity.findViewById(R.id.loginBtnRegister) as Button
     }
 
     @Test
     fun formTest(){
         //Phone too short
-        username.setText("1")
+        usernameET.setText("1")
         passwordET.setText("123456")
-        Assert.assertFalse(activity.validateCredentials())
+        Assert.assertFalse(mLoginActivity.validateCredentials())
 
         //Phone too long
-        username.setText("1222383383738282828292827")
+        usernameET.setText("1222383383738282828292827")
         passwordET.setText("123456")
-        Assert.assertFalse(activity.validateCredentials())
+        Assert.assertFalse(mLoginActivity.validateCredentials())
 
         //Password too short
-        username.setText("31991889992")
+        usernameET.setText("31991889992")
         passwordET.setText("1")
-        Assert.assertFalse(activity.validateCredentials())
+        Assert.assertFalse(mLoginActivity.validateCredentials())
 
         //Correct form
-        username.setText("31991889992")
+        usernameET.setText("31991889992")
         passwordET.setText("1234567")
-        Assert.assertTrue(activity.validateCredentials())
+        Assert.assertTrue(mLoginActivity.validateCredentials())
+    }
+
+    @Test
+    fun presenterCallTest(){
+        val username = "31991889992"
+        val password = "1234567"
+
+        usernameET.setText(username)
+        passwordET.setText(password)
+
+        mLoginActivity.loginBtnEnter.performClick()
+
+        verify(mPresenter).tryLogin(username, password)
     }
 
     @Test
@@ -74,7 +100,7 @@ class LoginActivityTest {
         btnRegister.performClick()
 
         val intent = shadowActivity.nextStartedActivity
-        Assert.assertEquals(intent.toString(), Intent(activity,
+        Assert.assertEquals(intent.toString(), Intent(mLoginActivity,
                 RegisterActivity::class.java).toString())
     }
 
@@ -83,7 +109,7 @@ class LoginActivityTest {
         btnRecoverPassword.performClick()
 
         val intent = shadowActivity.nextStartedActivity
-        Assert.assertEquals(intent.toString(), Intent(activity,
+        Assert.assertEquals(intent.toString(), Intent(mLoginActivity,
                 ResetPasswordActivity::class.java).toString())
     }
 
@@ -91,7 +117,7 @@ class LoginActivityTest {
     fun errorMessageTest(){
         val errorMsg = "Ops!"
 
-        activity.showLoginError(errorMsg)
+        mLoginActivity.showLoginError(errorMsg)
 
         Assert.assertEquals(errorMsg, ShadowToast.getTextOfLatestToast())
     }

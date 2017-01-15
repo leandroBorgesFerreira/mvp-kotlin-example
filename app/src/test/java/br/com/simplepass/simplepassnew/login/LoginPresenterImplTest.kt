@@ -3,6 +3,8 @@ package br.com.simplepass.simplepassnew.login
 import android.widget.Button
 import br.com.simplepass.simplepassnew.BuildConfig
 import br.com.simplepass.simplepassnew.domain.User
+import br.com.simplepass.simplepassnew.domain.repository.RepositoryInteractor
+import br.com.simplepass.simplepassnew.utils.ImmediateSchedulerProvider
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -24,7 +26,7 @@ import rx.observers.TestSubscriber
 class LoginPresenterImplTest {
 
     @Mock
-    lateinit var mLoginInteractor: LoginInteractor
+    lateinit var mRepositoryInteractor: RepositoryInteractor
     @Mock
     lateinit var mLoginView: LoginView
 
@@ -33,16 +35,18 @@ class LoginPresenterImplTest {
     @Before
     fun setup(){
         MockitoAnnotations.initMocks(this)
-        `when`(mLoginInteractor.login("a", "a")).thenReturn(Observable.just(User(1,
+        `when`(mRepositoryInteractor.login("a", "a")).thenReturn(Observable.just(User(1,
                 "31991889992",
                 "Leandro",
-                null)))
+                null,
+                "email@email.com")))
 
-        `when`(mLoginInteractor.login("b", "b")).thenReturn(Observable.create(Observable.OnSubscribe<User> {
+        `when`(mRepositoryInteractor.login("b", "b")).thenReturn(Observable.create(Observable.OnSubscribe<User> {
             sub -> sub.onError(Exception("Erro"))
         }))
 
-        mLoginPresenter = LoginPresenterImpl(mLoginView, mLoginInteractor)
+        mLoginPresenter = LoginPresenterImpl(
+                mLoginView, mRepositoryInteractor, ImmediateSchedulerProvider())
     }
 
     @Test

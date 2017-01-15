@@ -1,21 +1,26 @@
 package br.com.simplepass.simplepassnew.map
 
-import android.content.Context
 import br.com.simplepass.simplepassnew.domain.MapPoint
 import br.com.simplepass.simplepassnew.domain.VanInMap
+import br.com.simplepass.simplepassnew.domain.repository.RepositoryInteractor
+import br.com.simplepass.simplepassnew.utils.BaseSchedulerProvider
 
-import com.google.android.gms.maps.model.LatLng
 import rx.Subscriber
 
 /**
  * Created by hinovamobile on 10/01/17.
  */
-class MapPresenterImpl(private val mMapView: MapView, private val mMapInteractor: MapInteractor) : MapPresenter {
+class MapPresenterImpl(private val mMapView: MapView,
+                       private val mRepositoryInteractor: RepositoryInteractor,
+                       private val mSchedulerProvider: BaseSchedulerProvider) : MapPresenter {
 
     override fun updateMap(company: String) {
         mMapView.showProgress(true)
 
-        mMapInteractor.requestPoints(company).subscribe(object: Subscriber<Iterable<VanInMap>>(){
+        mRepositoryInteractor.requestPoints(company)
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
+                .subscribe(object: Subscriber<Iterable<VanInMap>>(){
             override fun onNext(t: Iterable<VanInMap>) {
                 mapDrawMapPoints(t)
             }

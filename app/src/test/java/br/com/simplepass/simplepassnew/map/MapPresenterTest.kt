@@ -4,7 +4,10 @@ package br.com.simplepass.simplepassnew.map
 import br.com.simplepass.simplepassnew.TestUtils
 import br.com.simplepass.simplepassnew.domain.User
 import br.com.simplepass.simplepassnew.domain.VanInMap
+import br.com.simplepass.simplepassnew.domain.repository.RepositoryInteractor
 import br.com.simplepass.simplepassnew.login.LoginPresenterImpl
+import br.com.simplepass.simplepassnew.utils.ImmediateSchedulerProvider
+import br.com.simplepass.simplepassnew.utils.SchedulerProvider
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -22,7 +25,7 @@ class MapPresenterTest {
     @Mock
     lateinit var mMapView : MapView
     @Mock
-    lateinit var mMapInteractor : MapInteractor
+    lateinit var mRepositoryInteractor: RepositoryInteractor
 
     lateinit var mMapPresenter : MapPresenter
 
@@ -33,18 +36,18 @@ class MapPresenterTest {
     @Before
     fun setup(){
         MockitoAnnotations.initMocks(this)
-        `when`(mMapInteractor.requestPoints(mCompany)).thenReturn(Observable.just(TestUtils.provideDefaultVans()))
+        `when`(mRepositoryInteractor.requestPoints(mCompany)).thenReturn(Observable.just(TestUtils.provideDefaultVans()))
 
-        `when`(mMapInteractor.requestPoints(errorMessage)).thenReturn(
+        `when`(mRepositoryInteractor.requestPoints(errorMessage)).thenReturn(
                 Observable.create(Observable.OnSubscribe<Iterable<VanInMap>> {
             sub -> sub.onError(Exception(errorMessage))
         }))
-        `when`(mMapInteractor.requestPoints(errorMessageNoMsg)).thenReturn(
+        `when`(mRepositoryInteractor.requestPoints(errorMessageNoMsg)).thenReturn(
                 Observable.create(Observable.OnSubscribe<Iterable<VanInMap>> {
                     sub -> sub.onError(Exception())
                 }))
 
-        mMapPresenter = MapPresenterImpl(mMapView, mMapInteractor)
+        mMapPresenter = MapPresenterImpl(mMapView, mRepositoryInteractor, ImmediateSchedulerProvider())
     }
 
     @Test

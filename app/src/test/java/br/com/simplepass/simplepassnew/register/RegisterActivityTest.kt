@@ -4,6 +4,8 @@ import android.support.design.widget.TextInputEditText
 import android.widget.Button
 import br.com.simplepass.simplepassnew.BuildConfig
 import br.com.simplepass.simplepassnew.R
+import br.com.simplepass.simplepassnew.TestUtils
+import br.com.simplepass.simplepassnew.domain.User
 import br.com.simplepass.simplepassnew.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
@@ -11,6 +13,9 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito.verify
+import org.mockito.MockitoAnnotations
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows
@@ -27,10 +32,21 @@ class RegisterActivityTest {
     lateinit var mRegisterView: RegisterView
     lateinit var mShadowActivity: ShadowActivity
 
+    @Mock
+    lateinit var mPresenter: RegisterPresenter
+
+    val defaultUsername = "31991889992"
+    val defaultPassword = "123456"
+    val defaultName = "Leandro"
+    val defaultEmail = "unittest@gmail.com"
 
     @Before
     fun setup() {
+        MockitoAnnotations.initMocks(this);
+
         mRegisterView = Robolectric.setupActivity(RegisterActivity::class.java)
+        mRegisterView.setPresenter(mPresenter)
+
         mShadowActivity = Shadows.shadowOf(mRegisterView as RegisterActivity)
     }
 
@@ -77,11 +93,21 @@ class RegisterActivityTest {
         Assert.assertEquals(errorMsg, ShadowToast.getTextOfLatestToast())
     }
 
+    @Test
+    fun presenterCallTest(){
+        val activity = mRegisterView as RegisterActivity
+
+        setDefaultValuesInForm(activity)
+        activity.registerBtnEnter.performClick()
+
+        verify(mPresenter).tryRegister(User(0, defaultUsername, defaultPassword, defaultName, defaultEmail))
+    }
+
     fun setDefaultValuesInForm(registerActivity: RegisterActivity){
-        registerActivity.registerUsername.setText("5531991787878")
-        registerActivity.registerPassword.setText("123456")
-        registerActivity.registerName.setText("Leandro")
-        registerActivity.registerEmail.setText("unittest@gmail.com")
+        registerActivity.registerUsername.setText(defaultUsername)
+        registerActivity.registerPassword.setText(defaultPassword)
+        registerActivity.registerName.setText(defaultName)
+        registerActivity.registerEmail.setText(defaultEmail)
     }
 
 }

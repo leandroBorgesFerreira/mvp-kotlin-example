@@ -3,6 +3,8 @@ package br.com.simplepass.simplepassnew.register
 import br.com.simplepass.simplepassnew.BuildConfig
 import br.com.simplepass.simplepassnew.TestUtils
 import br.com.simplepass.simplepassnew.domain.User
+import br.com.simplepass.simplepassnew.domain.repository.RepositoryInteractor
+import br.com.simplepass.simplepassnew.utils.ImmediateSchedulerProvider
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,7 +26,7 @@ import rx.observers.TestSubscriber
 class RegisterPresenterTest {
 
     @Mock
-    lateinit var mRegisterInteractor: RegisterInteractor
+    lateinit var mRepositoryInteractor: RepositoryInteractor
     @Mock
     lateinit var mRegisterView: RegisterView
 
@@ -35,20 +37,21 @@ class RegisterPresenterTest {
     @Before
     fun setup(){
         MockitoAnnotations.initMocks(this)
-        `when`(mRegisterInteractor.register(provideDefaultUser())).thenReturn(
+        `when`(mRepositoryInteractor.register(provideDefaultUser())).thenReturn(
                 Observable.just(provideDefaultUser()))
 
-        `when`(mRegisterInteractor.register(provideDefaultUser2()))
+        `when`(mRepositoryInteractor.register(provideDefaultUser2()))
                 .thenReturn(Observable.create(Observable.OnSubscribe<User> {
                     sub -> sub.onError(Exception("Erro"))
                 }))
 
-        `when`(mRegisterInteractor.register(provideDefaultUser3()))
+        `when`(mRepositoryInteractor.register(provideDefaultUser3()))
                 .thenReturn(Observable.create(Observable.OnSubscribe<User> {
                     sub -> sub.onError(Exception())
                 }))
 
-        mRegisterPresenter = RegisterPresenterImpl(mRegisterView, mRegisterInteractor)
+        mRegisterPresenter = RegisterPresenterImpl(
+                mRegisterView, mRepositoryInteractor, ImmediateSchedulerProvider())
     }
 
     @Test
@@ -64,7 +67,7 @@ class RegisterPresenterTest {
 
     }
 
-    fun provideDefaultUser() = User(1, "5531991889992", "Leandro", null)
-    fun provideDefaultUser2() = User(2, "5531991889992", "Leandro", null)
-    fun provideDefaultUser3() = User(3, "5531991889992", "Leandro", null)
+    fun provideDefaultUser() = User(1, "5531991889992", "Leandro", null, "email@email.com")
+    fun provideDefaultUser2() = User(2, "5531991889992", "Leandro", null, "email@email.com")
+    fun provideDefaultUser3() = User(3, "5531991889992", "Leandro", null, "email@email.com")
 }

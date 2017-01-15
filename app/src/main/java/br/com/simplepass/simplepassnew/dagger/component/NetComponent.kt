@@ -2,9 +2,9 @@ package br.com.simplepass.simplepassnew.dagger.component
 
 import br.com.simplepass.simplepassnew.dagger.module.AppModule
 import br.com.simplepass.simplepassnew.dagger.module.NetModule
-import br.com.simplepass.simplepassnew.login.LoginInteractorImpl
-import br.com.simplepass.simplepassnew.register.RegisterInteractorImpl
+import br.com.simplepass.simplepassnew.domain.repository.RepositoryInteractorImpl
 import dagger.Component
+import retrofit2.Retrofit
 import javax.inject.Singleton
 
 /**
@@ -13,6 +13,6 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = arrayOf(AppModule::class, NetModule::class))
 interface NetComponent {
-    fun inject(interactor: LoginInteractorImpl)
-    fun inject(interactor: RegisterInteractorImpl)
+    fun inject(interactor: RepositoryInteractorImpl)
+    fun setRetrofit(retrofit: Retrofit)
 }

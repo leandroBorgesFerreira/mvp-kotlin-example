@@ -11,16 +11,16 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Login">
-        <activity android:name=".login.LoginActivity">
+        <mLoginActivity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".register.RegisterActivity" />
-        <activity android:name=".resetPassword.ResetPasswordActivity" />
-        <activity android:name=".map.MainActivity"></activity>
+        </mLoginActivity>
+        <mLoginActivity android:name=".register.RegisterActivity" />
+        <mLoginActivity android:name=".resetPassword.ResetPasswordActivity" />
+        <mLoginActivity android:name=".map.MainActivity"></mLoginActivity>
     </application>
 
 </manifest>
