@@ -5,6 +5,7 @@ import rx.Subscriber
 
 /**
  * Created by hinovamobile on 20/12/16.
+ *
  */
 class LoginPresenterImpl(val mLoginView: LoginView, val mLoginInteractor: LoginInteractor) : LoginPresenter{
 
@@ -18,15 +19,13 @@ class LoginPresenterImpl(val mLoginView: LoginView, val mLoginInteractor: LoginI
 
             override fun onError(e: Throwable) {
                 mLoginView.showProgress(false)
-//                    Log.d("On error called", "Error: " + e.message)
-//
-//                    e.printStackTrace()
-//
-//                    val erroMessage = e.message
-//
-//                    if(erroMessage != null) {
-//                        listener.onLoginError(erroMessage)
-//                    }
+                    val erroMessage = e.message
+
+                    if(erroMessage != null) {
+                        mLoginView.showLoginError(erroMessage)
+                    } else {
+                        mLoginView.showLoginError("Erro ao logar")
+                    }
             }
 
             override fun onCompleted() {

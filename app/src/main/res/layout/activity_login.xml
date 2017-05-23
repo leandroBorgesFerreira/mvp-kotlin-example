@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -44,7 +45,8 @@
         android:layout_height="wrap_content"
         style="@style/Button"
         android:layout_marginBottom="2dp"
-        android:text="@string/button_enter"/>
+        android:text="@string/button_enter"
+        app:spinning_bar_color="@android:color/white"/>
 
     <Button
         android:id="@+id/loginBtnResetPassword"
